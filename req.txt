@@ -1,0 +1,11 @@
+groq
+dotenv
+pillow
+sounddevice 
+scipy
+faster-whisper
+gTTS
+elevenlabs 
+google-genai
+playsound==1.2.2
+gradio
