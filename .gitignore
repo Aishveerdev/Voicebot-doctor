@@ -3,4 +3,4 @@ venv/
 response.mp3
 patient_voice.wav
 __pycache__/
-*.pyc
+*.pycgit
