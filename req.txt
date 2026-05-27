@@ -9,3 +9,6 @@ elevenlabs
 google-genai
 playsound==1.2.2
 gradio
+fastapi
+uvicorn  
+python-multipart

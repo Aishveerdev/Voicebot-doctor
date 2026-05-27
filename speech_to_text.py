@@ -3,7 +3,7 @@ from faster_whisper import WhisperModel
 # load model once
 model = WhisperModel("base",device="cpu")
 
-def transcribe_audio(audio_path):
+async def transcribe_audio(audio_path):
     try:
         segments, info = model.transcribe(
             audio_path,

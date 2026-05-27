@@ -11,13 +11,17 @@ from fastapi import FastAPI, UploadFile, File, Form
 
 load_dotenv()
 
-logger = logging.getLogger("uvicorn.error")
-logger.setLevel(logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s %(message)s',
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
 @app.get("/")
 async def root():
+    logger.info("Received request to root endpoint")
     print("Received request to root endpoint")
     return {"message": "Welcome "}
 

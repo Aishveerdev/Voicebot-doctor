@@ -9,7 +9,7 @@ load_dotenv()
 google_api_key = os.getenv("GOOGLE_API_KEY")
 
 
-def ask_vision_model(image_path, query):
+async def ask_vision_model(image_path, query):
 
     
     #load image
