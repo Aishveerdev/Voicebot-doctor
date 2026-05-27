@@ -10,3 +10,4 @@ class Medical_Response(BaseModel):
     should_consult_doctor: bool
     confidence: float # for future analytics
     spoken_response: str # for text to speech conversion
+

@@ -13,20 +13,26 @@ load_dotenv()
 
 async def main(audio, image):
 
-
-    patient_query = transcribe_audio(audio)
-    #Get medical response
-    medical_response = ask_vision_model(image, patient_query)
-    
-    # Generate speech response
-    audio_response = speak_text(
-        medical_response.spoken_response
-    )
-    return (
-    patient_query,
-    medical_response.model_dump_json(indent=4),
-    audio_response
-    )
+    try:
+        patient_query = transcribe_audio(audio)
+        #Get medical response
+        medical_response = ask_vision_model(image, patient_query)
+        
+        # Generate speech response
+        audio_response = speak_text(
+            medical_response.spoken_response
+        )
+        return (
+        patient_query,
+        medical_response.model_dump_json(indent=4),
+        audio_response
+        )
+    except Exception as e:
+        return (
+            "Error transcribing audio or analyzing image.",
+            "Error generating diagnosis.",
+            None
+        )
 
 
 with gr.Blocks(theme=gr.themes.Soft()) as demo:
@@ -52,11 +58,7 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
             label="Speak Symptoms"
         )
 
-    audio_response_output = gr.Audio(
-    label="AI Spoken Response",
-    autoplay=True
-    )
-
+   
 
     analyze_btn = gr.Button("Analyze")
 
@@ -64,6 +66,12 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
     transcript_output = gr.Textbox(
         label="Patient Query"
     )
+
+    audio_response_output = gr.Audio(
+    label="AI Spoken Response",
+    autoplay=True
+    )
+
 
 
     diagnosis_output = gr.Textbox(
