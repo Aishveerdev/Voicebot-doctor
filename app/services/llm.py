@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 from google import genai
-from models import Medical_Response
+from app.models.schema import Medical_Response
 from dotenv import load_dotenv
 
 load_dotenv()

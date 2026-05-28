@@ -1,6 +1,6 @@
 from gtts import gTTS
 from playsound import playsound
-from models import Medical_Response
+from app.models.schema import Medical_Response
 import asyncio
 
 

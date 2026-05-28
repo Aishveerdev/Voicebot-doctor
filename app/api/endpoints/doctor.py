@@ -1,15 +1,10 @@
-import gradio as gr
-import asyncio    
+from fastapi import APIRouter, logger , UploadFile, File
+from app.models.schema import Medical_Response , API_Response
+from app.services.llm import ask_vision_model
+from app.services.speech_to_text import transcribe_audio
+from app.services.text_to_speech import speak_text
 import logging
-from models import Medical_Response , API_Response
-from dotenv import load_dotenv
-from speech_to_text import transcribe_audio
-from text_to_speech import speak_text
-from llm import ask_vision_model
-from fastapi import FastAPI, UploadFile, File, Form
 
-
-load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,15 +12,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
 
-@app.get("/")
-async def root():
-    logger.info("Received request to root endpoint")
-    print("Received request to root endpoint")
-    return {"message": "Welcome "}
+router = APIRouter()
 
-@app.post("/analyze" ,response_model=API_Response)   
+
+@router.post("/analyze" ,response_model=API_Response)
 async def analyze(
         audio: UploadFile = File(...),
         image: UploadFile = File(...)):
@@ -76,14 +67,3 @@ async def analyze(
                 spoken_response="Sorry, I couldn't generate a response right now. Please try again."            ),
             audio_response=""
         )
-
-
-
-
-
-
-
-
-
-
-
