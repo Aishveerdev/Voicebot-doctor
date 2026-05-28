@@ -14,4 +14,4 @@ class Medical_Response(BaseModel):
 class API_Response(BaseModel):
     patient_query: str
     diagnosis: Medical_Response
-    audio_response: str
+    # audio_response: str

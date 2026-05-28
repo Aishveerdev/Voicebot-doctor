@@ -2,7 +2,7 @@ from fastapi import APIRouter, logger , UploadFile, File
 from app.models.schema import Medical_Response , API_Response
 from app.services.llm import ask_vision_model
 from app.services.speech_to_text import transcribe_audio
-from app.services.text_to_speech import speak_text
+# from app.services.text_to_speech import speak_text
 import logging
 
 
@@ -44,15 +44,17 @@ async def analyze(
         medical_response = await ask_vision_model(image_path, patient_query)
         logger.info("Vision model response received")
 
-        logger.info("Generating spoken response")
-        audio_response = speak_text(medical_response.spoken_response)
-        logger.info("Text-to-speech conversion complete")
+        # logger.info("Generating spoken response")
+        # audio_response = speak_text(medical_response.spoken_response)
+        # logger.info("Text-to-speech conversion complete")
 
         return API_Response(
             patient_query=patient_query,
             diagnosis=medical_response,
-            audio_response=audio_response
+            # audio_response=audio_response
         )
+    # TEXT TO SPEECH WOUL DBE HANDLED IN FRONTEND ONLY. 
+
     except Exception as e:
         logger.exception("Error processing /analyze request")
         return API_Response(
