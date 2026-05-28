@@ -1,9 +1,13 @@
-from fastapi import APIRouter, logger , UploadFile, File
+from fastapi import APIRouter, logger , UploadFile, File , Depends
 from app.models.schema import Medical_Response , API_Response
 from app.services.llm import ask_vision_model
 from app.services.speech_to_text import transcribe_audio
 # from app.services.text_to_speech import speak_text
 import logging
+from app.services.jwt_verify import verify_token
+
+
+
 
 
 logging.basicConfig(
@@ -18,9 +22,15 @@ router = APIRouter()
 
 @router.post("/analyze" ,response_model=API_Response)
 async def analyze(
+
+        user=Depends(verify_token) ,
+    
         audio: UploadFile = File(...),
         image: UploadFile = File(...)):
 
+
+    
+    logger.info("Received /analyze request from user: %s", user.email)
     logger.info("Received /analyze request: audio=%s image=%s", audio.filename, image.filename)
 
     # SAVE AUDIO

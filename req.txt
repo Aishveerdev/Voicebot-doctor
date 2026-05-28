@@ -12,3 +12,6 @@ gradio
 fastapi
 uvicorn  
 python-multipart
+supabase 
+pydantic[email]
+python-jose
