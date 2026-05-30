@@ -37,8 +37,6 @@ async def analyze_query(user, audio, image):
         logger.info(f"creating report for user_id={user.id} with patient_query={patient_query}")
         report_id = await create_report(user.id, patient_query)
         # We returned report_id in cretae report function thats why now we can store it in variable " report id " is create report function's outpu t,, spo we are basicallty storing output of create report function which is nothing but report id.
-        logger.info("Report creation initiated")
-
 
         logger.info("Asking vision model")
         medical_response = await ask_vision_model(image_path, patient_query)

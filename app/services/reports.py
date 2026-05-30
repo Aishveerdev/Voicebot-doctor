@@ -1,7 +1,6 @@
 from app.core.supabase_client import supabase
 import logging
-import asyncio
-
+from app.models.schema import Medical_Response
 logger = logging.getLogger(__name__)
 
 
@@ -46,7 +45,8 @@ async def create_report(user_id: str, patient_query: str):
 
 
 # this is for updating the report with diagnosis after vision model gives response , thats why report_id.
-async def update_report(report_id: int, diagnosis: str):
+async def update_report(report_id: int, medical_response: Medical_Response):
+    logger.info(f"medical_response type = {type(medical_response)}")
     try:
         logger.info(
             f"Updating medical report for report_id={report_id}"
@@ -56,8 +56,8 @@ async def update_report(report_id: int, diagnosis: str):
             supabase.table("medical_report")
             .update(
                 {
-                    "diagnosis": diagnosis,
-                    "status": "completed",
+                    "medical_response": medical_response.model_dump(),
+                    "status": "processed",
                 }
             )
             .eq("id", report_id)
