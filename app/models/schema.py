@@ -15,3 +15,14 @@ class API_Response(BaseModel):
     patient_query: str
     diagnosis: Medical_Response
     # audio_response: str
+
+class ChatResponse(BaseModel):
+    Response: str
+
+class ChatRequest(BaseModel):
+    message: str
+
+
+class ChatMessageResponse ( BaseModel):
+    role: str
+    content: str

@@ -96,3 +96,23 @@ async def get_report_history(user_id: str):
     except Exception as e:
         logger.exception(f"Failed to fetch report history for user_id={user_id}: {e}")
         raise 
+
+
+async def get_report_by_id(report_id: int):
+    try:
+        logger.info(f"Fetching report for report_id={report_id}")
+
+        response = (
+            supabase.table("medical_report")
+            .select("*")
+            .eq("id", report_id)
+            .select()
+            .execute()
+        )
+
+        logger.info(f"Retrieved report for report_id={report_id}")
+
+        return response.data if response.data else None
+    except Exception as e:
+        logger.exception(f"Failed to fetch report for report_id={report_id}: {e}")
+        raise

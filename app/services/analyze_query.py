@@ -5,6 +5,10 @@ from app.services.speech_to_text import transcribe_audio
 from app.services.reports import create_report , update_report
 from app.models.schema import API_Response, Medical_Response
 from app.models.schema import Medical_Response
+from app.services.chat_db import create_chat_session
+
+
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,6 +42,10 @@ async def analyze_query(user, audio, image):
         report_id = await create_report(user.id, patient_query)
         # We returned report_id in cretae report function thats why now we can store it in variable " report id " is create report function's outpu t,, spo we are basicallty storing output of create report function which is nothing but report id.
 
+
+        #Chat session creation
+        session_id = await create_chat_session(user.id, report_id)        
+
         logger.info("Asking vision model")
         medical_response = await ask_vision_model(image_path, patient_query)
         await update_report( report_id, medical_response)
@@ -48,6 +56,8 @@ async def analyze_query(user, audio, image):
         # logger.info("Text-to-speech conversion complete")
 
         return API_Response(
+            report_id=report_id,
+            session_id=session_id,
             patient_query=patient_query,
             diagnosis=medical_response,
             # audio_response=audio_response

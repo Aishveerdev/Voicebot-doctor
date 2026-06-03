@@ -21,6 +21,6 @@ async def analyze( user=Depends(verify_token) ,
 
 
 
-@router.get("/history")
-async def get_history(user=Depends(verify_token)):
+@router.get("/report-history")
+async def get_report(user=Depends(verify_token)):
     return await get_report_history(user.id)
