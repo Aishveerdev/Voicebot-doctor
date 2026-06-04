@@ -2,15 +2,23 @@ from app.core.supabase_client import supabase
 
 
 # Chat sesison
-async def create_chat_session(user_id: str,report_id: str):
+async def create_chat_session(user_id: str):
     
     response = ( supabase.table("chat_session").insert({
-        "user_id": user_id,
-        "report_id": report_id
+        "user_id": user_id
     })
     .execute()
     )
     return response.data[0]["id"] 
+
+#update session
+async def update_chat_session(session_id, report_id):
+    response = ( supabase.table("chat_session")
+                .update({"report_id": report_id})
+                .eq("id", session_id)
+                .execute()
+    )
+    return response.data[0]
 
 # Get session by id , this is created because through this 
 async def get_chat_session(session_id: str):

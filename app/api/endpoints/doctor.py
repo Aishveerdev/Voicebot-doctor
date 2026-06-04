@@ -1,12 +1,11 @@
 
 from fastapi import APIRouter, UploadFile, File , Depends
 from app.models.schema import API_Response
-from app.services import analyze_query
+from app.services import process_image_query
 # from app.services.text_to_speech import speak_text
 from app.services.jwt_verify import verify_token
 from app.services.reports import get_report_history
-from app.services.analyze_query import analyze_query
-
+from app.services.chat_orchestrator import orchestrate_chat
 
 router = APIRouter()
 
@@ -17,7 +16,7 @@ async def analyze( user=Depends(verify_token) ,
                 image: UploadFile = File(...)
                 ):
 
-    return await analyze_query(user, audio, image)
+    return await orchestrate_chat(user, audio, image)
 
 
 

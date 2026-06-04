@@ -5,7 +5,7 @@ from app.services.speech_to_text import transcribe_audio
 from app.services.reports import create_report , update_report
 from app.models.schema import API_Response, Medical_Response
 from app.models.schema import Medical_Response
-from app.services.chat_db import create_chat_session
+from app.services.supabase_db import create_chat_session , update_chat_session
 
 
 
@@ -35,16 +35,22 @@ async def analyze_query(user, audio, image):
     logger.debug("Saved image file to %s", image_path)
 
     try:
+        logger.info("query received for image analysis, starting processing")
         logger.info("Transcribing audio")
         patient_query = await transcribe_audio(audio_path)
+        #Chat session creation.
         logger.info("Audio transcription complete")
+        logger.info("Creating chat session for user_id=%s", user.id)
+        session_id = await create_chat_session(user.id)
+        logger.info("Chat session created with session_id=%s for user_id=%s", session_id, user.id)
+        # Create report.( processing )
         logger.info(f"creating report for user_id={user.id} with patient_query={patient_query}")
         report_id = await create_report(user.id, patient_query)
-        # We returned report_id in cretae report function thats why now we can store it in variable " report id " is create report function's outpu t,, spo we are basicallty storing output of create report function which is nothing but report id.
 
-
-        #Chat session creation
-        session_id = await create_chat_session(user.id, report_id)        
+        #Update chat session with report id  
+        logger.info(f"Updating chat session {session_id} with report_id={report_id}")
+        await update_chat_session(session_id, report_id)
+        logger.info(f"Chat session {session_id} updated with report_id={report_id}")
 
         logger.info("Asking vision model")
         medical_response = await ask_vision_model(image_path, patient_query)
