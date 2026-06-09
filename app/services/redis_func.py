@@ -21,7 +21,7 @@ async def add_message(session_id: str, role: str, content: str):
 
 
 async def get_messages(session_id: str):
-
+# is session id de jinne vi messages ne , return all.
     key = f"chat:{session_id}"
 
     messages = await redis.lrange(key, 0, -1)

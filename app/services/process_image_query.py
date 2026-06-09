@@ -1,11 +1,11 @@
 import logging
+import os
 from fastapi import logger
 from app.services.llm import ask_vision_model
-from app.services.speech_to_text import transcribe_audio
 from app.services.reports import create_report , update_report
 from app.models.schema import API_Response, Medical_Response
 from app.models.schema import Medical_Response
-from app.services.supabase_db import create_chat_session , update_chat_session
+from app.services.supabase_db import update_chat_session
 
 
 
@@ -18,15 +18,10 @@ logger = logging.getLogger(__name__)
 
     
 
-async def analyze_query(user, audio, image):
+async def analyze_query(user,image=None , patient_query=None, session_id=None):
     
-    logger.info(f"Current user id: {user.id}")
+    logger.info(f"Current session id: {session_id} for user id: {user.id}")
 
-    # SAVE AUDIO
-    audio_path = f"temp_{audio.filename}"
-    with open(audio_path, "wb") as f:
-        f.write(await audio.read())
-    logger.debug("Saved audio file to %s", audio_path)
 
     # SAVE IMAGE
     image_path = f"temp_{image.filename}"
@@ -36,13 +31,8 @@ async def analyze_query(user, audio, image):
 
     try:
         logger.info("query received for image analysis, starting processing")
-        logger.info("Transcribing audio")
-        patient_query = await transcribe_audio(audio_path)
-        #Chat session creation.
-        logger.info("Audio transcription complete")
-        logger.info("Creating chat session for user_id=%s", user.id)
-        session_id = await create_chat_session(user.id)
-        logger.info("Chat session created with session_id=%s for user_id=%s", session_id, user.id)
+
+
         # Create report.( processing )
         logger.info(f"creating report for user_id={user.id} with patient_query={patient_query}")
         report_id = await create_report(user.id, patient_query)
@@ -57,6 +47,13 @@ async def analyze_query(user, audio, image):
         await update_report( report_id, medical_response)
         logger.info("Vision model response received")
 
+        # Delete temp image file\
+        try:
+            os.remove(image_path)
+            logger.debug("Deleted temp image file %s", image_path)
+        except OSError as e:
+            logger.error("Error occurred while deleting temp image file %s: %s", image_path, e)
+
         # logger.info("Generating spoken response")
         # audio_response = speak_text(medical_response.spoken_response)
         # logger.info("Text-to-speech conversion complete")
@@ -65,7 +62,7 @@ async def analyze_query(user, audio, image):
             report_id=report_id,
             session_id=session_id,
             patient_query=patient_query,
-            diagnosis=medical_response,
+            diagnosis=medical_response
             # audio_response=audio_response
         )
     # TEXT TO SPEECH WOUL DBE HANDLED IN FRONTEND ONLY. 

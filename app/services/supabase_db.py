@@ -9,7 +9,8 @@ async def create_chat_session(user_id: str):
     })
     .execute()
     )
-    return response.data[0]["id"] 
+    return response.data[0]
+   
 
 #update session
 async def update_chat_session(session_id, report_id):
@@ -28,6 +29,20 @@ async def get_chat_session(session_id: str):
                 .execute()
     )
     return response.data[0] if response.data else None
+
+# Get sessions
+async def get_all_sessions(user_id:str):
+    response = (
+        supabase.table("chat_session")
+        .select("*")
+        .eq("user_id", user_id)
+        .order("created_at", desc=True)
+        .execute()
+    )
+    return response.data
+
+
+
 
 # Chat message
 async def save_message(session_id: str,role: str,content: str):

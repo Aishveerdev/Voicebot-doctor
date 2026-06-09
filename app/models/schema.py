@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List
+from datetime import datetime
 
 class Medical_Response(BaseModel): 
 
@@ -8,21 +9,31 @@ class Medical_Response(BaseModel):
     severity: str
     recommendations: List[str]
     should_consult_doctor: bool
-    confidence: float # for future analytics
-    spoken_response: str # for text to speech conversion
+    confidence: float 
+   
 
 class API_Response(BaseModel):
     patient_query: str
     diagnosis: Medical_Response
-    # audio_response: str
+    session_id: str | None = None
+    report_id: str | None = None
+
 
 class ChatResponse(BaseModel):
-    Response: str
+    patient_query: str
+    response: str              # plain text, no schema enforcement
+    session_id: str | None = None
+    report_id: str | None = None
 
-class ChatRequest(BaseModel):
-    message: str
 
 
 class ChatMessageResponse ( BaseModel):
     role: str
     content: str
+
+class SessionResponse(BaseModel):
+    
+    id: str
+    user_id : str
+    report_id: str | None = None
+    created_at: datetime
