@@ -45,7 +45,7 @@ async def create_report(user_id: str, patient_query: str):
 
 
 # this is for updating the report with diagnosis after vision model gives response , thats why report_id.
-async def update_report(report_id: int, medical_response: Medical_Response):
+async def update_report(report_id: int, medical_response: Medical_Response , image_count = None):
     logger.info(f"medical_response type = {type(medical_response)}")
     try:
         logger.info(
@@ -58,6 +58,7 @@ async def update_report(report_id: int, medical_response: Medical_Response):
                 {
                     "medical_response": medical_response.model_dump(),
                     "status": "processed",
+                    "image_count": image_count
                 }
             )
             .eq("id", report_id)

@@ -14,7 +14,7 @@ client = genai.Client(api_key=google_api_key)
 
 
 
-async def ask_vision_model(image_path, query):
+async def ask_vision_model(image_path, query=None , prompt=None):
 
     
     #load image
@@ -31,7 +31,7 @@ async def ask_vision_model(image_path, query):
     #generate response
     response = client.models.generate_content(
         model="gemini-3-flash-preview",
-        contents=[image, query],
+        contents=[image, query , prompt],
         config=medical_config
     )
 

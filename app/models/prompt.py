@@ -67,3 +67,29 @@ Rules:
 Patient Query:
 {patient_query}
 """
+
+def build_image_followup_prompt(existing_medical_response: dict, patient_query: str) -> str:
+    return f"""
+You are an expert medical AI assistant.
+
+A patient previously described symptoms and received an initial assessment below.
+They have now provided an image related to the same condition.
+
+Existing Assessment:
+{existing_medical_response}
+
+Patient's additional query:
+{patient_query}
+
+Analyze the image in context of the existing assessment and respond ONLY with updated JSON:
+{{
+    "detected_issue": "...",
+    "description": "...",
+    "severity": "mild | moderate | severe",
+    "recommendations": ["..."],
+    "should_consult_doctor": true or false,
+    "confidence": 0.0 to 1.0
+}}
+
+No markdown. No preamble. Raw JSON only.
+"""
