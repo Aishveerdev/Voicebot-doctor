@@ -1,0 +1,152 @@
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Supabase Auth Test</title>
+</head>
+
+<body>
+
+    <h1>Supabase Auth Testing</h1>
+
+    <button onclick="googleLogin()">
+        Continue with Google
+    </button>
+
+    <hr>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Email"
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+    >
+
+    <button onclick="signup()">
+        Signup
+    </button>
+
+    <button onclick="login()">
+        Login
+    </button>
+
+    <hr>
+
+    <button onclick="callProtectedRoute()">
+        Test Protected Endpoint
+    </button>
+
+    <pre id="output"></pre>
+
+    <script type="module">
+
+        import { createClient }
+
+        from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        const supabase = createClient(
+
+            "https://kbliuaafwclrzgmsgeps.supabase.co",
+
+            "sb_publishable_w5BXRS9IMR4pjsimGgP_UQ_d-Y2nyWg"
+
+        )
+
+        async function googleLogin() {
+
+            await supabase.auth.signInWithOAuth({
+
+                provider: "google"
+
+            })
+
+        }
+
+        async function signup() {
+
+            const email = document.getElementById("email").value
+
+            const password = document.getElementById("password").value
+
+            const { data, error } = await supabase.auth.signUp({
+
+                email,
+                password
+
+            })
+
+            console.log(data, error)
+
+        }
+
+        async function login() {
+
+            const email = document.getElementById("email").value
+
+            const password = document.getElementById("password").value
+
+            const { data, error }
+
+                = await supabase.auth.signInWithPassword({
+
+                    email,
+                    password
+
+                })
+
+            console.log(data, error)
+
+        }
+
+        async function callProtectedRoute() {
+
+            const {
+
+                data: { session }
+
+            }
+
+                = await supabase.auth.getSession()
+
+            const token = session.access_token
+
+            const response = await fetch(
+
+                "http://127.0.0.1:8000/analyze",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        Authorization: `Bearer ${token}`
+
+                    }
+
+                }
+
+            )
+
+            const result = await response.text()
+
+            document.getElementById("output").innerText = result
+        }
+
+        window.googleLogin = googleLogin
+        window.signup = signup
+        window.login = login
+        window.callProtectedRoute = callProtectedRoute
+
+    </script>
+
+</body>
+
+</html>
+```

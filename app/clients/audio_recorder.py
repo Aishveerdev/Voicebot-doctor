@@ -14,9 +14,12 @@ def record_audio(filename="patient_voice.wav", duration=5, sample_rate=16000):
     )
 
     sd.wait()
+    
 
     write(filename, sample_rate, audio)
 
     # print("Audio saved!")
 
     return filename
+
+record_audio()
