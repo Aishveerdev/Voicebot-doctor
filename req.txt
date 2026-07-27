@@ -16,3 +16,4 @@ supabase
 pydantic[email]
 python-jose
 redis
+python-multipart
