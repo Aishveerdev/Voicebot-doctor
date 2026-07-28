@@ -1,4 +1,4 @@
-from app.services.speech_to_text import transcribe_audio
+from app.clients.speech_to_text import transcribe_audio
 
 
 async def preprocess_query(audio=None, text_query=None):
