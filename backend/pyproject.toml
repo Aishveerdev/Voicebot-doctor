@@ -1,0 +1,26 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "elevenlabs>=2.60.0",
+    "fastapi>=0.141.1",
+    "faster-whisper>=1.2.1",
+    "google-genai>=2.16.0",
+    "gradio>=6.21.0",
+    "groq>=1.6.0",
+    "gtts>=2.5.4",
+    "pillow>=12.3.0",
+    "playsound==1.2.2",
+    "pydantic[email]>=2.13.4",
+    "python-dotenv>=1.2.2",
+    "python-jose>=3.5.0",
+    "python-multipart>=0.0.32",
+    "redis>=8.1.0",
+    "scipy>=1.17.1",
+    "sounddevice>=0.5.5",
+    "supabase>=2.31.0",
+    "uvicorn>=0.52.0",
+]
