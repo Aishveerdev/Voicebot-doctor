@@ -1,0 +1,6 @@
+venv/
+.env
+response.mp3
+patient_voice.wav
+__pycache__/
+*.pycgit
